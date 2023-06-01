@@ -1,0 +1,9 @@
+.CompanyDetail{
+    text-align: left;
+    margin: 20px;
+    width: 50rem;
+}
+
+.CompanyDetail p {
+    text-align: left;
+}

@@ -3,6 +3,10 @@ import CompanyDetail from './CompanyDetail';
 import CompanyList from './CompanyList';
 import HomePage from './HomePage';
 import Joblist from './JobList';
+/** List of Route components for routing
+ *
+ * App -> RoutesList -> {HompePage, CompanyList, CompanyDetail, Joblist}
+ */
 function RoutesList(){
   return (
 

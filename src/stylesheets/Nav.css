@@ -1,0 +1,9 @@
+.nav-link {
+    display: inline;
+    margin: 10px;
+    padding: 10px;
+}
+.navbar {
+    padding: 20px;
+    background-color: antiquewhite;
+}
