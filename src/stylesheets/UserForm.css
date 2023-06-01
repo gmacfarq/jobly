@@ -1,0 +1,18 @@
+.UserForm{
+    display: flex;
+    justify-content: center;
+    text-align: left;
+}
+
+.UserForm div{
+    margin-bottom: 10px
+}
+
+.UserForm .input-group{
+    justify-content: right;
+}
+
+h1 {
+    margin:10px;
+}
+
