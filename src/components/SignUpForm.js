@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../stylesheets/UserForm.css";
+import Alerts from "./Alerts";
 const INITIAL_FORM_STATE = {
   username: "",
   password: "",
@@ -16,6 +18,8 @@ const INITIAL_FORM_STATE = {
  */
 function SignupForm({ signup }) {
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+  const [alerts, setAlerts] = useState(null)
+  const navigate = useNavigate();
 
   /** Update form input. */
   function handleChange(evt) {
@@ -27,9 +31,14 @@ function SignupForm({ signup }) {
   }
 
   /** handle form submission */
-  function handleSubmit(evt) {
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    signup(formData);
+    try {
+      await signup(formData);
+      navigate("/jobs")
+    } catch (errs) {
+      setAlerts(errs);
+    }
   }
 
   return (
@@ -55,6 +64,7 @@ function SignupForm({ signup }) {
               onChange={handleChange}
               value={formData.password}
               className="form-control rounded"
+              type="password"
             />
           </div>
           <div className="form-group">
@@ -94,6 +104,7 @@ function SignupForm({ signup }) {
           </div>
         </form>
       </div>
+        {alerts && <Alerts messages={alerts}/>}
     </div>
   );
 }

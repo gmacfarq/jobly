@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../stylesheets/UserForm.css";
+import Alerts from "./Alerts";
 const INITIAL_FORM_STATE = {
   username: "",
   password: ""
@@ -13,6 +15,8 @@ const INITIAL_FORM_STATE = {
  */
 function LoginForm({ login }) {
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+  const [alerts, setAlerts] = useState(null);
+  const navigate = useNavigate();
 
   /** Update form input. */
   function handleChange(evt) {
@@ -24,11 +28,16 @@ function LoginForm({ login }) {
   }
 
   /** handle form submission */
-  function handleSubmit(evt) {
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    login(formData);
+    try {
+      await login(formData);
+      navigate("/jobs");
+    } catch (errs) {
+      setAlerts(errs);
+    }
   }
-
+  //TODO: alert component with props for type of alert and array of messages
   return (
     <div>
       <h1>Log In</h1>
@@ -52,6 +61,7 @@ function LoginForm({ login }) {
               onChange={handleChange}
               value={formData.password}
               className="form-control rounded"
+              type="password"
             />
           </div>
           <div className="input-group">
@@ -61,8 +71,9 @@ function LoginForm({ login }) {
           </div>
         </form>
       </div>
+      {alerts && <Alerts messages={alerts} />}
     </div>
   );
 }
 
-export default LoginForm
+export default LoginForm;

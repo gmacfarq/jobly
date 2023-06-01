@@ -1,4 +1,5 @@
 import "../stylesheets/Loader.css"
+
 /** Component to render placeholder html while content loads
  *
  * {CompanyDetail, JobList, CompanyList} -> Loader

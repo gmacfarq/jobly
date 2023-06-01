@@ -27,7 +27,6 @@ import { Link } from "react-router-dom";
  *  RoutesList -> CompanyList -> {Loader, CompanyCard}
  */
 function CompanyList() {
-
   const [companies, setCompanies] = useState({
     data: null,
     isLoading: true

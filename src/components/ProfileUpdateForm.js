@@ -1,11 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "../stylesheets/UserForm.css";
-const INITIAL_FORM_STATE = {
-  username: "",
-  firstName: "",
-  lastName: "",
-  email: ""
-};
+import userContext from "./userContext";
+import Alerts from "./Alerts";
+
 /** Component to render and handle submission of profile update form
  *
  *  props:
@@ -14,7 +11,10 @@ const INITIAL_FORM_STATE = {
  *  RoutesList -> ProfileUpdateForm
  */
 function ProfileUpdateForm({ update }) {
-  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+  const { currUser } = useContext(userContext);
+  const [formData, setFormData] = useState(currUser.data);
+  const [alerts, setAlerts] = useState(null)
+
 
   /** Update form input. */
   function handleChange(evt) {
@@ -26,9 +26,16 @@ function ProfileUpdateForm({ update }) {
   }
 
   /** handle form submission */
-  function handleSubmit(evt) {
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    update(formData);
+    const {username, firstName, lastName, email} = formData
+
+    try {
+      await update({username, firstName, lastName, email});
+      setAlerts(["Profile updated"])
+    } catch (errs) {
+      setAlerts(errs);
+    }
   }
 
   return (
@@ -44,6 +51,7 @@ function ProfileUpdateForm({ update }) {
               onChange={handleChange}
               value={formData.username}
               className="form-control rounded"
+              disabled
             />
           </div>
           <div className="form-group">
@@ -83,6 +91,7 @@ function ProfileUpdateForm({ update }) {
           </div>
         </form>
       </div>
+        {alerts && <Alerts messages={alerts}/>}
     </div>
   );
 }

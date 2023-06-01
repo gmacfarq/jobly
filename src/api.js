@@ -62,6 +62,37 @@ class JoblyApi {
     return res.jobs;
   }
 
+  /** Get user details */
+  static async getUser(username){
+    let res = await this.request(`users/${username}`);
+    return res.user;
+  }
+
+  /** Get JWT via user register */
+  static async signupUser(userData){
+    let res = await this.request(`auth/register`, userData, "POST");
+    //console.log(res.token);
+    return res.token;
+  }
+
+  /** Get JWT via user login  */
+  static async loginUser(userData){
+    let res = await this.request(`auth/token`, userData, "POST");
+    return res.token;
+  }
+
+  /** update user info  */
+  static async updateUser(userData){
+    let updateData = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email
+    }//TODO: Seperate these in form rather than api
+    console.log(updateData)
+    let res = await this.request(`users/${userData.username}`, updateData, "PATCH");
+    return res.user;
+  }
+
 }
 
 export default JoblyApi

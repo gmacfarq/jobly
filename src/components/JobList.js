@@ -35,7 +35,6 @@ import SearchForm from "./SearchForm";
  */
 
 function JobList() {
-
   const [jobs, setJobs] = useState({
     data:  null,
     isLoading: true
@@ -47,6 +46,7 @@ function JobList() {
 
   async function fetchJobs(query="_") {
     const result = await JoblyApi.getAllJobs(query);
+    //TODO: result for no jobs found
     setJobs({
       data: result,
       isLoading: false
