@@ -29,7 +29,6 @@ function SearchForm({search}){
 
   return (
     <div className="search-form">
-      {/* <form onSubmit={handleSubmit}> */}
       <form>
         <div className="input-group">
           <label></label>

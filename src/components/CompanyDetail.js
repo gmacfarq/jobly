@@ -45,7 +45,7 @@ function CompanyDetail(){
 
   console.log(company)
   return(
-    <div className="List">
+    <div className="list">
       <div className="CompanyDetail">
         <h2>{company.data.name}</h2>
         <p>{company.data.description}</p>
