@@ -4,6 +4,7 @@ import "../stylesheets/list.css";
 import JobCardList from "./JobCardList";
 import Loader from "./Loader";
 import SearchForm from "./SearchForm";
+import ReactPaginate from "react-paginate";
 
 /** Component to render a JobList
  *
@@ -35,12 +36,11 @@ import SearchForm from "./SearchForm";
  */
 
 function JobList() {
-  const [pageSize] = useState(20);
-  const [pageNum, setPageNum] = useState(0);
   const [jobs, setJobs] = useState({
-    data: null,
+    data: [],
     isLoading: true
   });
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(function fetchJobsWhenMounted() {
     fetchJobs();
@@ -48,7 +48,6 @@ function JobList() {
 
   async function fetchJobs(query = "_") {
     const result = await JoblyApi.getAllJobs(query);
-    //TODO: result for no jobs found
     setJobs({
       data: result,
       isLoading: false
@@ -62,35 +61,75 @@ function JobList() {
     });
   };
 
-  function pageForward() {
-    setPageNum(currPageNum => currPageNum + 1);
+  function handlePageChange(selectedPage) {
+    setCurrentPage(selectedPage.selected);
     goToTop();
   }
 
-  function pageBackward() {
-    setPageNum(currPageNum => currPageNum - 1);
-    goToTop();
-  }
-
-  const isFirstPage = pageNum === 0;
-  const isLastPage = (pageNum +1) * pageSize >= jobs.data?.length;
-  const paginatedJobs = jobs.data?.slice(pageNum * pageSize, (pageNum + 1) * pageSize);
+  const jobsPerPage = 20;
+  const offset = currentPage * jobsPerPage;
+  const currentPageJobs = jobs.data.slice(offset, offset + jobsPerPage);
 
   if (jobs.isLoading) return (<Loader />);
 
   return (
     <div className="list">
-
       <SearchForm search={fetchJobs} />
-      {!isFirstPage && <p className="btn" onClick={pageBackward}>{"<"}</p>}
-      <p style={{display:"inline"}}>{pageNum + 1 }</p>
-      {!isLastPage && <p className="btn" onClick={pageForward}>{">"}</p>}
-      <JobCardList jobs={paginatedJobs} />
-      {!isFirstPage && <p className="btn" onClick={pageBackward}>{"<"}</p>}
-      <p style={{display:"inline"}}>{pageNum + 1 }</p>
-      {!isLastPage && <p className="btn" onClick={pageForward}>{">"}</p>}
+      <JobCardList jobs={currentPageJobs} />
+      <ReactPaginate
+        previousLabel={"Prev"}
+        nextLabel={"Next"}
+        breakLabel={"..."}
+        pageCount={Math.ceil(jobs.data.length / jobsPerPage)}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageChange}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+      />
     </div>
   );
 }
 
 export default JobList;
+
+// function JobList() {
+//   const [jobs, setJobs] = useState({
+//     data: null,
+//     isLoading: true
+//   });
+
+//   useEffect(function fetchJobsWhenMounted() {
+//     fetchJobs();
+//   }, []);
+
+//   async function fetchJobs(query = "_") {
+//     const result = await JoblyApi.getAllJobs(query);
+//     //TODO: result for no jobs found
+//     setJobs({
+//       data: result,
+//       isLoading: false
+//     });
+//   }
+
+//   function goToTop() {
+//     window.scrollTo({
+//       top: 0,
+//       behavior: 'smooth',
+//     });
+//   };
+
+
+
+//   if (jobs.isLoading) return (<Loader />);
+
+//   return (
+//     <div className="list">
+
+//       <SearchForm search={fetchJobs} />
+//       <JobCardList jobs={jobs} />
+//     </div>
+//   );
+// }
+
+// export default JobList;

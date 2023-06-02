@@ -1,5 +1,6 @@
 import { useState } from "react"
 import "../stylesheets/SearchForm.css"
+import _ from "lodash"
 
 /** Component to render and handle submission of search form
  *
@@ -10,30 +11,26 @@ import "../stylesheets/SearchForm.css"
  */
 function SearchForm({search}){
   const [formData, setFormData] = useState({term:""});
+  const [typingTimer, setTypingTimer] = useState(null);
 
-  /** Update form input. */
   function handleChange(evt) {
     const { name, value } = evt.target;
     setFormData(currFormData => ({
       ...currFormData,
       [name]: value,
     }));
-  }
 
-  /** Call parent function and clear form. */
-  function handleSubmit(evt) {
-    evt.preventDefault();
-    if(formData.term.trim()){
-      search(formData.term);
-    }else{
-      search("_");
-    }
+    clearTimeout(typingTimer);
 
+    setTypingTimer(setTimeout(() => {
+      value.trim() ? search(value) : search("_");
+    }, 1000));
   }
 
   return (
     <div className="search-form">
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}> */}
+      <form>
         <div className="input-group">
           <label></label>
           <input
@@ -44,9 +41,6 @@ function SearchForm({search}){
             type="search"
             className="form-control rounded"
           />
-          <button className="btn btn-outline-primary">
-            Submit
-          </button>
         </div>
       </form>
     </div>
