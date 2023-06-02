@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import "../stylesheets/Nav.css";
 import userContext from './userContext';
 /** Navigation bar present throughout Jobly App
@@ -19,33 +19,33 @@ function Nav({ logout }) {
   return (
     <nav className="navbar navbar-light">
       <div>
-        <Link className="nav-link" to="/">Jobly</Link>
+        <NavLink className="nav-link" to="/">Jobly</NavLink>
       </div>
 
       {currUser.data
         ?
         <div>
-          <Link className="btn btn-secondary nav-link" to="/companies">
+          <NavLink className="btn btn-secondary nav-link" to="/companies">
             Companies
-          </Link>
-          <Link className="btn btn-secondary nav-link" to="/jobs">
+          </NavLink>
+          <NavLink className="btn btn-secondary nav-link" to="/jobs">
             Jobs
-          </Link>
-          <Link className="btn btn-secondary nav-link" to="/profile">
+          </NavLink>
+          <NavLink className="btn btn-secondary nav-link" to="/profile">
             Profile
-          </Link>
+          </NavLink>
           <p className="btn btn-secondary nav-link" onClick={logoutAndSendHome}>
             {`Log out ${currUser.data.username}`}
           </p>
         </div>
         :
         <div>
-          <Link className="btn btn-secondary nav-link" to="/signup">
+          <NavLink className="btn btn-secondary nav-link" to="/signup">
             Sign Up
-          </Link>
-          <Link className="btn btn-secondary nav-link" to="/login">
+          </NavLink>
+          <NavLink className="btn btn-secondary nav-link" to="/login">
             Login
-          </Link>
+          </NavLink>
         </div>
       }
 

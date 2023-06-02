@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import JoblyApi from "../api";
-import "../stylesheets/list.css"
+import "../stylesheets/list.css";
 import JobCardList from "./JobCardList";
 import Loader from "./Loader";
 import SearchForm from "./SearchForm";
@@ -35,16 +35,18 @@ import SearchForm from "./SearchForm";
  */
 
 function JobList() {
+  const [pageSize] = useState(20);
+  const [pageNum, setPageNum] = useState(0);
   const [jobs, setJobs] = useState({
-    data:  null,
+    data: null,
     isLoading: true
   });
 
   useEffect(function fetchJobsWhenMounted() {
-      fetchJobs();
+    fetchJobs();
   }, []);
 
-  async function fetchJobs(query="_") {
+  async function fetchJobs(query = "_") {
     const result = await JoblyApi.getAllJobs(query);
     //TODO: result for no jobs found
     setJobs({
@@ -53,12 +55,40 @@ function JobList() {
     });
   }
 
+  function goToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  function pageForward() {
+    setPageNum(currPageNum => currPageNum + 1);
+    goToTop();
+  }
+
+  function pageBackward() {
+    setPageNum(currPageNum => currPageNum - 1);
+    goToTop();
+  }
+
+  const isFirstPage = pageNum === 0;
+  const isLastPage = (pageNum +1) * pageSize >= jobs.data?.length;
+  const paginatedJobs = jobs.data?.slice(pageNum * pageSize, (pageNum + 1) * pageSize);
+
   if (jobs.isLoading) return (<Loader />);
 
   return (
     <div className="list">
-        <SearchForm search={fetchJobs} />
-        <JobCardList jobs={jobs.data} />
+
+      <SearchForm search={fetchJobs} />
+      {!isFirstPage && <p className="btn" onClick={pageBackward}>{"<"}</p>}
+      <p style={{display:"inline"}}>{pageNum + 1 }</p>
+      {!isLastPage && <p className="btn" onClick={pageForward}>{">"}</p>}
+      <JobCardList jobs={paginatedJobs} />
+      {!isFirstPage && <p className="btn" onClick={pageBackward}>{"<"}</p>}
+      <p style={{display:"inline"}}>{pageNum + 1 }</p>
+      {!isLastPage && <p className="btn" onClick={pageForward}>{">"}</p>}
     </div>
   );
 }
