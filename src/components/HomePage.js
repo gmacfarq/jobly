@@ -10,8 +10,8 @@ function HomePage(){
   const {currUser} = useContext(userContext)
   return(
     <div className="home-page">
-      <h1>Welcome to  Jobly,</h1>
-      {currUser.data && <h1>{currUser.data.firstName} {currUser.data.lastName}</h1>}
+      <h1>Welcome to  Jobly</h1>
+      {currUser.data && <h1>, {currUser.data.firstName} {currUser.data.lastName}</h1>}
     </div>
   )
 }
