@@ -1,6 +1,5 @@
 import { useState } from "react"
 import "../stylesheets/SearchForm.css"
-import _ from "lodash"
 
 /** Component to render and handle submission of search form
  *
